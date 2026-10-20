@@ -13,9 +13,9 @@ MDFILES=$(git ls-files '*.md')
 if [ -f "$BLOCKLIST" ]; then
   grep -v '^#' "$BLOCKLIST" | sed 's/^[^:]*://' | tr '/' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | grep -v '^$' | while IFS= read -r w; do
     [ "${#w}" -lt 2 ] && continue
-    if grep -F -e "$w" $MDFILES >/dev/null 2>&1; then
+    if grep -iqF -e "$w" $MDFILES >/dev/null 2>&1; then
       echo "BLOCKED word: $w"
-      grep -nF -e "$w" $MDFILES | head -2
+      grep -inF -e "$w" $MDFILES | head -2
       echo "$w" >> /tmp/bosswatch_hit.txt
     fi
   done
